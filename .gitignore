@@ -1,0 +1,20 @@
+# System files
+.DS_Store
+Thumbs.db
+
+# Swift Package Manager (macOS)
+.build/
+.swiftpm/
+Packages/
+Generated/
+
+# Python virtual environments & build files (Windows)
+__pycache__/
+*.pyc
+venv/
+**/venv/
+**/dist/
+**/build/
+**/*.spec
+*.egg-info/
+.onnx/

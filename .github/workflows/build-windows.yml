@@ -1,0 +1,42 @@
+name: Build Windows Executable
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          cd Windows
+          pip install -r requirements.txt
+
+      - name: Compile Executable with PyInstaller
+        run: |
+          cd Windows
+          if (Test-Path "logo.ico") {
+              pyinstaller --onefile --windowed --icon="logo.ico" --name="AutoFoto Legal Expres" --collect-data mediapipe main.py
+          } else {
+              pyinstaller --onefile --windowed --name="AutoFoto Legal Expres" --collect-data mediapipe main.py
+          }
+
+      - name: Upload Finished Executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: AutoFoto-Legal-Expres-Windows
+          path: Windows/dist/AutoFoto Legal Expres.exe
