@@ -474,7 +474,7 @@ class MainWindow(QMainWindow):
         
     def create_divider(self):
         divider = QFrame()
-        divider.setFrameShape(QFrame.FrameShape.HLine)
+        divider.setFrameShape(QFrame.Shape.HLine)
         divider.setStyleSheet("background-color: #333;")
         return divider
         
