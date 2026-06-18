@@ -30,9 +30,9 @@ jobs:
         run: |
           cd Windows
           if (Test-Path "logo.ico") {
-              pyinstaller --onefile --windowed --icon="logo.ico" --name="AutoFoto Legal Expres" --collect-data mediapipe main.py
+              pyinstaller --onefile --windowed --icon="logo.ico" --name="AutoFoto Legal Expres" --collect-all mediapipe main.py
           } else {
-              pyinstaller --onefile --windowed --name="AutoFoto Legal Expres" --collect-data mediapipe main.py
+              pyinstaller --onefile --windowed --name="AutoFoto Legal Expres" --collect-all mediapipe main.py
           }
 
       - name: Upload Finished Executable

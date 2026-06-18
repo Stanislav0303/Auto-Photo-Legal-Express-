@@ -3,7 +3,7 @@ import os
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, 
     QLabel, QPushButton, QSlider, QCheckBox, QFileDialog, QDialog, 
-    QFrame, QSplitter, QProgressBar
+    QFrame, QSplitter, QProgressBar, QMessageBox
 )
 from PyQt6.QtCore import Qt, QThread, pyqtSignal, QSize
 from PyQt6.QtGui import QFont, QIcon, QPixmap
@@ -87,8 +87,10 @@ class ImageLoaderWorker(QThread):
                 "mask": mask
             })
         except Exception as e:
-            print(f"Error in loader thread: {e}")
-            self.finished.emit({})
+            import traceback
+            err_msg = "".join(traceback.format_exception(type(e), e, e.__traceback__))
+            print(f"Error in loader thread: {err_msg}")
+            self.finished.emit({"error": err_msg})
 
 class ExportPreviewDialog(QDialog):
     def __init__(self, state, parent=None):
@@ -540,7 +542,13 @@ class MainWindow(QMainWindow):
         self.canvas.show()
         
         if not result or result.get("pil_image") is None:
+            err_msg = result.get("error", "Nieznany błąd (pusty wynik)") if result else "Pusty wynik"
             self.file_info_lbl.setText("Błąd ładowania pliku")
+            QMessageBox.critical(
+                self, 
+                "Błąd ładowania obrazu", 
+                f"Nie udało się załadować zdjęcia.\n\nSzczegóły błędu:\n{err_msg}"
+            )
             return
             
         self.state.input_image = result["pil_image"]
